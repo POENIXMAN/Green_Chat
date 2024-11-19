@@ -226,13 +226,6 @@ docker-compose exec web python manage.py create_test_data
 
 ---
 
-## Тестирование API
-Для запуска тестов выполните:
-```bash
-docker-compose exec web python manage.py test
-```
-
----
 
 ## Важные моменты
 1. Все запросы к API, требующие аутентификации, должны содержать заголовок `Authorization: Bearer <access_token>`.
