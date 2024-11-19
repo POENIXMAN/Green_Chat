@@ -2,31 +2,34 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:14
-    container_name: postgres_db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: green_chat
+    image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    environment:
+      POSTGRES_DB: green_chat_db
+      POSTGRES_USER: green_chat_user
+      POSTGRES_PASSWORD: securepassword
+    networks:
+      - green_chat_network
 
   web:
-    build:
-      context: .
-    container_name: django_web
-    command: python manage.py runserver 0.0.0.0:8000
+    build: .
+    command: daphne -b 0.0.0.0 -p 8000 green_chat.asgi:application
     volumes:
       - .:/app
+      - ./staticfiles:/app/staticfiles
+
     ports:
       - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://green_chat_user:securepassword@db:5432/green_chat_db
     depends_on:
       - db
-    environment:
-      - DJANGO_SETTINGS_MODULE=green_chat.settings
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/green_chat
+    networks:
+      - green_chat_network
 
 volumes:
   postgres_data:
+
+networks:
+  green_chat_network:
