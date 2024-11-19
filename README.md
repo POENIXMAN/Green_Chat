@@ -32,6 +32,10 @@ Green Chat — это чат-приложение, которое предост
      ```bash
      docker-compose exec web python manage.py createsuperuser
      ```
+5. Миграция:
+   ```bash
+     docker-compose exec web python manage.py migrate
+     ```
 
 ---
 
